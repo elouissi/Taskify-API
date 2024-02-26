@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('status', ['to do','in progress', 'done']);
+            $table->enum('status', ['to do','in progress', 'done'])->default('to do');
             $table->unsignedBigInteger('user_id');
  
             $table->foreign('user_id')->references('id')->on('users');

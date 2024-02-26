@@ -15,13 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-    
+    Route::get('Get_ALL_tasks',[TaskController::class,'index']);
+    Route::get('Show_task/{id}',[TaskController::class,'show']);
     Route::post('Create_tasks',[TaskController::class,'store']);
-    Route::put('Update_task/{id}','TaskController@update');
-    Route::delete('Delete_tasks/{id}','TaskController@destroy');
+    Route::put('Update_task/{id}',[TaskController::class,'update']);
+    Route::delete('Delete_tasks/{id}',[TaskController::class,'destroy']);
  
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('Get_ALL_tasks',[TaskController::class,'index']);

@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Http\Requests\TaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Repositories\TaskRepositorieInterface;
+use GuzzleHttp\Psr7\Request;
 
 class TaskController extends Controller
 {
@@ -54,9 +55,12 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Task $task)
+    public function show(int $id)
     {
-        //
+        $task = $this->TaskRepositorieInterface->getById($id);
+        return response()->json([
+            "tasks" => $task
+         ]);
     }
 
     /**
@@ -70,16 +74,31 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTaskRequest $request, Task $task)
+    public function update(TaskRequest $request, int $id)
     {
-        //
+        
+        $form = $request->validated();
+        $this->TaskRepositorieInterface->update($id , $form);
+        $Tasks = $this->TaskRepositorieInterface->getAll();
+        return response()->json([
+           "tasks" => $Tasks
+        ]);
+
+        
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Task $task)
+    public function destroy(int $id)
     {
-        //
+        $this->TaskRepositorieInterface->delete($id);
+        $Tasks = $this->TaskRepositorieInterface->getAll();
+        return response()->json([
+           "tasks" => $Tasks
+        ]);
+
+
+        
     }
 }
