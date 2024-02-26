@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Models\Task;
 use App\Http\Requests\TaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+ use App\Http\Resources\TaskResource;
 use App\Repositories\TaskRepositorieInterface;
 use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -22,12 +24,9 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $Tasks = $this->TaskRepositorieInterface->getAll();
-       
-        return response()->json($Tasks);
-    
-        
-     }
+        $tasks = $this->TaskRepositorieInterface->getAll();
+        return TaskResource::collection($tasks);
+    }
 
     /**
 
@@ -45,11 +44,11 @@ class TaskController extends Controller
     public function store(TaskRequest $request)
     {
         $form = $request->validated();
+         $form['user_id'] = Auth::id();
         $this->TaskRepositorieInterface->create($form);
         $Tasks = $this->TaskRepositorieInterface->getAll();
-        return response()->json([
-           "tasks" => $Tasks
-        ]);
+        return TaskResource::collection($Tasks);
+
     }
 
     /**
@@ -58,9 +57,8 @@ class TaskController extends Controller
     public function show(int $id)
     {
         $task = $this->TaskRepositorieInterface->getById($id);
-        return response()->json([
-            "tasks" => $task
-         ]);
+        return response()->json($task);
+
     }
 
     /**
@@ -80,9 +78,8 @@ class TaskController extends Controller
         $form = $request->validated();
         $this->TaskRepositorieInterface->update($id , $form);
         $Tasks = $this->TaskRepositorieInterface->getAll();
-        return response()->json([
-           "tasks" => $Tasks
-        ]);
+        return TaskResource::collection($Tasks);
+
 
         
     }
@@ -94,9 +91,8 @@ class TaskController extends Controller
     {
         $this->TaskRepositorieInterface->delete($id);
         $Tasks = $this->TaskRepositorieInterface->getAll();
-        return response()->json([
-           "tasks" => $Tasks
-        ]);
+        return TaskResource::collection($Tasks);
+
 
 
         
