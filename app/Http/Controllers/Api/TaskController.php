@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Task;
-use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\TaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Repositories\TaskRepositorieInterface;
 
@@ -35,15 +35,20 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTaskRequest $request)
+    public function store(TaskRequest $request)
     {
-        //
+        $form = $request->validated();
+        $this->TaskRepositorieInterface->create($form);
+        $Tasks = $this->TaskRepositorieInterface->getAll();
+        return response()->json([
+           "tasks" => $Tasks
+        ]);
     }
 
     /**

@@ -15,13 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => 'auth:api', 'namespace' =>'Api'],function(){
     
-    Route::post('Create_tasks','TaskController@store');
+    Route::post('Create_tasks',[TaskController::class,'store']);
     Route::put('Update_task/{id}','TaskController@update');
     Route::delete('Delete_tasks/{id}','TaskController@destroy');
-
-});
+ 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
