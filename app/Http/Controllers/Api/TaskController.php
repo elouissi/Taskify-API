@@ -22,6 +22,13 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
+       /**
+     * @OA\Get(
+     *     path="/api/Get_ALL_tasks",
+     *     summary="Get all tasks",
+     *     @OA\Response(response="200", description="List of tasks"),
+     * )
+     */
     public function index()
     {
         $tasks = $this->TaskRepositorieInterface->getAll();
@@ -41,6 +48,20 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+      /**
+     * @OA\Post(
+     *     path="/api/Create_tasks",
+     *     summary="Create a new task",
+     *     @OA\Parameter(
+     *         name="description",
+     *         in="query",
+     *         description="Task description",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(response="200", description="Task created"),
+     * )
+     */
     public function store(TaskRequest $request)
     {
         $form = $request->validated();
@@ -54,10 +75,31 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
+       /**
+     * @OA\Get(
+     *     path="/api/Show_task/{id}",
+     *     summary="Get a specific task",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Task ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response="200", description="Task found"),
+     *     @OA\Response(response="404", description="Task not found")
+     * )
+     */
     public function show(int $id)
     {
         $task = $this->TaskRepositorieInterface->getById($id);
         return response()->json($task);
+
+    }
+    public function getByUserId(){
+        $user_id = Auth::id();
+        $Task = $this->TaskRepositorieInterface->getByUserId($user_id);
+        return response()->json($Task);
 
     }
 
@@ -71,6 +113,28 @@ class TaskController extends Controller
 
     /**
      * Update the specified resource in storage.
+     */
+      /**
+     * @OA\Put(
+     *     path="/api/Update_task/{id}",
+     *     summary="Update a specific task",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Task ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="description",
+     *         in="query",
+     *         description="Task description",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(response="200", description="Task updated"),
+     *     @OA\Response(response="404", description="Task not found")
+     * )
      */
     public function update(TaskRequest $request, int $id)
     {
@@ -86,6 +150,22 @@ class TaskController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     */
+    
+    /**
+     * @OA\Delete(
+     *     path="/api/Delete_tasks/{id}",
+     *     summary="Delete a specific task",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Task ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response="200", description="Task deleted"),
+     *     @OA\Response(response="404", description="Task not found")
+     * )
      */
     public function destroy(int $id)
     {

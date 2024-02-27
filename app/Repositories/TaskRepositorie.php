@@ -11,6 +11,11 @@ class TaskRepositorie implements TaskRepositorieInterface
         return Task::findOrFail($id);
     }
 
+    public function getByUserId($user_id)
+    {
+        return Task::where('user_id', $user_id)->get();
+    }
+
     public function create(array $data)
     {
         return Task::create($data);

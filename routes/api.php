@@ -15,14 +15,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('Show_task/{id}',[TaskController::class,'show']);
-    Route::post('Create_tasks',[TaskController::class,'store']);
-    Route::put('Update_task/{id}',[TaskController::class,'update']);
-    Route::delete('Delete_tasks/{id}',[TaskController::class,'destroy']);
-}); 
-Route::get('Get_ALL_tasks',[TaskController::class,'index']);
-
+Route::middleware('auth:sanctum')->resource('tasks', TaskController::class)->except([
+  'create', 'edit'
+]);
 
 
     

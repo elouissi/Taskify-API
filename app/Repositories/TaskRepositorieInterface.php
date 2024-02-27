@@ -6,6 +6,8 @@ namespace App\Repositories;
 interface TaskRepositorieInterface
 {
     public function getById($id);
+    public function getByUserId($user_id);
+
 
     public function getAll();
     public function create(array $data);
