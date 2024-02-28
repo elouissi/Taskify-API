@@ -69,6 +69,11 @@ class TaskController extends Controller
         $this->authorize('create', Task::class);
         $form = $request->validated();
          $form['user_id'] = Auth::id();
+         
+         if (!isset($form['name'])) {
+            return response()->json(['error' => 'Name field is required'], 422);
+        }
+    
         $this->TaskRepositorieInterface->create($form);
         $Tasks = $this->TaskRepositorieInterface->getAll();
         return TaskResource::collection($Tasks);
