@@ -31,8 +31,10 @@ class TaskController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Task::class);
         $tasks = $this->TaskRepositorieInterface->getAll();
         return TaskResource::collection($tasks);
+        
     }
 
     /**
@@ -64,6 +66,7 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request)
     {
+        $this->authorize('create', Task::class);
         $form = $request->validated();
          $form['user_id'] = Auth::id();
         $this->TaskRepositorieInterface->create($form);
@@ -93,6 +96,7 @@ class TaskController extends Controller
     public function show(int $id)
     {
         $task = $this->TaskRepositorieInterface->getById($id);
+        $this->authorize('view', $task);
         return response()->json($task);
 
     }
@@ -138,7 +142,9 @@ class TaskController extends Controller
      */
     public function update(TaskRequest $request, int $id)
     {
-        
+
+        $task = Task::findOrFail($id);
+        $this->authorize('update', $task);
         $form = $request->validated();
         $this->TaskRepositorieInterface->update($id , $form);
         $Tasks = $this->TaskRepositorieInterface->getAll();
@@ -169,6 +175,8 @@ class TaskController extends Controller
      */
     public function destroy(int $id)
     {
+        $task = Task::findOrFail($id);
+        $this->authorize('delete', $task);
         $this->TaskRepositorieInterface->delete($id);
         $Tasks = $this->TaskRepositorieInterface->getAll();
         return TaskResource::collection($Tasks);

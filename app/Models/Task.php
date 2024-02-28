@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Policies\TaskPolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
@@ -14,4 +15,8 @@ class Task extends Model
         'status',
         'user_id'
     ];
+    public static function policyClass()
+    {
+        return TaskPolicy::class;
+    }
 }

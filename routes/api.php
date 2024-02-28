@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->resource('tasks', TaskController::class)->except([
   'create', 'edit'
 ]);
+Route::get('getByUserId',[TaskController::class,'getByUserId'])
+  ->middleware('auth:sanctum');
 
 
     
